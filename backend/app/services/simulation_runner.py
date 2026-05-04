@@ -24,7 +24,7 @@ from ..utils.locale import get_locale, set_locale
 from .zep_graph_memory_updater import ZepGraphMemoryManager
 from .simulation_ipc import SimulationIPCClient, CommandType, IPCResponse
 
-logger = get_logger('mirofish.simulation_runner')
+logger = get_logger('bidswarm.simulation_runner')
 
 # 标记是否已注册清理函数
 _cleanup_registered = False
@@ -384,8 +384,12 @@ class SimulationRunner:
         else:
             cls._graph_memory_enabled[simulation_id] = False
         
-        # 确定运行哪个脚本（脚本位于 backend/scripts/ 目录）
-        if platform == "twitter":
+        # 실행할 스크립트 결정 (backend/scripts/ 위치)
+        if platform == "bid":
+            # BidSwarm 입찰 시뮬레이션
+            script_name = "run_bid_simulation.py"
+            state.twitter_running = True  # 진행 상태 플래그 재활용
+        elif platform == "twitter":
             script_name = "run_twitter_simulation.py"
             state.twitter_running = True
         elif platform == "reddit":
